@@ -1,0 +1,17 @@
+1.新建脚本文件 touch restart.sh
+2.赋予权限 chmod 777 restart.sh
+3.编辑 vi restart.sh
+#!/bin/sh
+while true
+do
+ps -ef | grep "DataCommonInterface.dll" | grep -v "grep"
+if [ "$?" -eq 1 ]
+then
+dotnet DataCommonInterface.dll & disown -h %1 #启动应用，修改成自己的启动应用脚本或命令
+echo "process has been restarted!"
+else
+echo "process already started!"
+fi
+sleep 30
+done
+4.启动脚本 nohup sh restart.sh & 
