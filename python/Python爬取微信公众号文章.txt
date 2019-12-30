@@ -1,0 +1,48 @@
+# coding=utf-8
+# -*- coding: utf-8 -*-
+import requests
+import time
+import csv
+import pandas as pd
+
+# 目标url
+url = "https://mp.weixin.qq.com/cgi-bin/appmsg"
+
+# 使用Cookie，跳过登陆操作
+headers = {
+  "Cookie": "noticeLoginFlag=1; ua_id=4snyUTbyVCZ4MZDHAAAAACeVhYf8qt2lEdl7GnOrzig=; pgv_pvi=4308611072; _ga=GA1.2.1676897982.1572413641; pgv_pvid=591453280; RK=DfDxBFpcOT; ptcz=1ff66603bd5c08bdf88d035ebbc94528edf176a4dbd7b85dd4137ff4bb8ade31; pgv_si=s73588736; cert=WH6tzpHkAgCx8_oEEt7mLBJA84QovU56; rewardsn=; wxtokenkey=777; mm_lang=zh_CN; uin=o0515707513; skey=@f3sbQxEvT; ptisp=ctc; sig=h01996255a560f5040e35defeda4510c3ca9f21fc9e085f0fa795b500ac3187c09b8911ad646295ebfa; master_key=ORFOr8NMNhPdKxpTLy+i/noXjbAoNMFECGV/sTGVTbM=; noticeLoginFlag=1; uuid=07e9ea0864f4fdb49768db6871d0a1d5; ticket=90be528b13d4d58eb4b6e05d2c8f3e49f6f0bb47; ticket_id=gh_9ff355387bf2; remember_acct=414116191%40qq.com; data_bizuin=3292662498; bizuin=3224806076; data_ticket=78+D/JvaLjtBglCJGZ4MhzndYE+gWXvCM2xGtauhmgh/dAJZ+VNqNzpmir9H8qKq; slave_sid=bDFKQjdBVlhSdldBeVlSdzl5YlNMNlRna1M1Qjc3WGRKNVVnbmxoeUtYVUZxMHlma0tac1JEdThYTnJLODEwNHMzYjBGVTlFMTdMV3ZyX2luRUhEMGs2akRnYmt4V3BWdVB5c2hWYXlqejhPRHFqWkJxaDhqWFF1R2hkeHpYMDdDa1N5cUZ3c3BreldVQjBK; slave_user=gh_9ff355387bf2; xid=cbd666cfc329664abdb8789cab6d00e2; openid2ticket_o4gpCxIIJ_F5nkgLGKwPPJOASmSo=TwltLrR2H3TIgGrgjU5BAF9UGPK6ID/iJtnEcS5oejw=",
+  "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36",
+}
+
+data = {
+    "token": "1765500572",
+    "lang": "zh_CN",
+    "f": "json",
+    "ajax": "1",
+    "action": "list_ex",
+    "begin": "0",
+    "count": "5",
+    "query": "",
+    "fakeid": "MzI3NDQ5NTAxNw==",
+    "type": "9",
+}
+
+content_list = []
+for i in range(30):
+    data["begin"] = i*5
+    time.sleep(3)
+    # 使用get方法进行提交
+    content_json = requests.get(url, headers=headers, params=data).json()
+    # 返回了一个json，里面是每一页的数据
+    for item in content_json["app_msg_list"]:
+    # 提取每页文章的标题及对应的url
+        items = []
+        items.append(time.strftime("%Y--%m--%d", time.localtime(item["create_time"])))
+        items.append(item["title"])
+        items.append(item["link"])
+        content_list.append(items)
+    print(i)
+name = ['create_time', 'title', 'link']
+test = pd.DataFrame(columns=name, data=content_list)
+test.to_csv("30.csv", mode='a', encoding='utf_8_sig')
+print("保存成功")

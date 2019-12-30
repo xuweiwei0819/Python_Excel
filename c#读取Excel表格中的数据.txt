@@ -1,0 +1,23 @@
+using Spire.Xls;
+
+namespace myControl
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            //创建Workbook对象
+            Workbook wb = new Workbook();
+
+            //加载Excel文档
+            wb.LoadFromFile(@"C:\Users\Administrator\Desktop\chengjian.xlsx");
+
+            //获取第一个工作表
+            Worksheet sheet = wb.Worksheets[0];
+
+            //获取指定单元格的值
+            string value = sheet.Range["D3"].Value2.ToString();
+            Debug.Write(value);
+        }
+    }
+}

@@ -1,0 +1,26 @@
+from selenium import webdriver
+import pyautogui
+import time
+
+from selenium.webdriver.common.keys import Keys
+
+driver = webdriver.Chrome()
+driver.get("http://mp.weixin.qq.com/s?__biz=MzI4OTY2NjAzMA==&mid=2247485219&idx=3&sn=99d47bf6ba295b9ac3ab3d2eef157df1&chksm=ec2ae1a2db5d68b4989d98168d08fad4580405e966a38cdf02beccf6e1a70693819f769c01f6#rd")
+time.sleep(3)
+pyautogui.hotkey('ctrl', 'p')
+pyautogui.moveTo(786,173)
+time.sleep(1)
+pyautogui.click()
+time.sleep(1)
+pyautogui.moveTo(786,215)
+time.sleep(1)
+pyautogui.click()
+time.sleep(1)
+pyautogui.moveTo(800,712)
+time.sleep(1)
+pyautogui.click()
+time.sleep(1)
+pyautogui.moveTo(805,518)
+time.sleep(1)
+pyautogui.click()
+driver.quit()
